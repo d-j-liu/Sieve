@@ -13,8 +13,8 @@ public class Sieve {
 
     // the table of integers up to the maximum value
     private final int[] _list;
-    // the last position reported
-    private int _pos = 1;
+    // the last position tested
+    private int _pos = 0;
     // the last prime number found
     private int _prime = 0;
 
@@ -23,6 +23,7 @@ public class Sieve {
      * @param max  the upper limit for the search
      */
     public Sieve( int max ) {
+        if( max < 2 ) max = 2;
         _list = new int[max + 1];
         for( int i = 0; i <= max; ++i ) {
             _list[i] = unknown;
@@ -61,6 +62,9 @@ public class Sieve {
         for( _pos = _prime + 1; _pos < _list.length; ++_pos ) {
             if( _list[_pos] != 0 ) continue;
             _prime = _pos;
+            // multiples of the current prime number below its square
+            // are already marked with lesser prime numbers
+            _pos = _prime * ( _prime - 1 );
             _list[_prime] = 1;
             return _prime;
         }
